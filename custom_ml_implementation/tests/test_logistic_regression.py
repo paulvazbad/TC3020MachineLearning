@@ -6,25 +6,28 @@ class TestLogisticRegression(unittest.TestCase):
         self.logistic_regression = LogisticRegression()
 
     def test_h(self):
-        self.assertEqual(self.logistic_regression.h([2],[1,3]), 7,"Error in h function")
-        self.assertEqual(self.logistic_regression.h([3],[1,3]), 10, "Error in h function")
+        # -3 +1 +1 = g(-1) = 1 / (1 + e^1)
+        self.assertEqual(self.logistic_regression.h([1,1],[-3,1,1]),0.2689414213699951)
+        # Must be y= 0.5 when x1 +x2  = 3
+        self.assertEqual(self.logistic_regression.h([1,2],[-3,1,1]),0.5)
+        self.assertLessEqual(self.logistic_regression.h([1,1],[-3,1,1]), 0.5,"Error in h function")
+        self.assertGreaterEqual(self.logistic_regression.h([1,4],[-3,1,1]), 0.5, "Error in h function")
 
     def test_J(self):
-        self.assertEqual(self.logistic_regression.J([[2],[3]],[3,4],[1,1]), 0.0, "Error in J Function")
-        self.assertEqual(self.logistic_regression.J([[2],[3]],[3,4],[1,0.5]), 0.8125, "Error in J Function")
-        self.assertEqual(self.logistic_regression.J([[1],[2],[3]],[1,2,3],[0,0]), 2.3333333333333335, "Error in J Function")
+        self.assertAlmostEqual(self.logistic_regression.J([[2],[3]],[0,1],[1,1]), 1.5333, 3,"Error in J Function")
+        self.assertAlmostEqual(self.logistic_regression.J([[0],[1]],[0,1],[1,1]), 0.72009, 3,"Error in J Function")
 
     def test_J_modified(self):
-        self.assertEqual(self.logistic_regression.J_modified([[2],[3]],[3,4],[1,0.5], 1),-3.25)
-        self.assertAlmostEqual(self.logistic_regression.J_modified([[1],[2],[3]],[1,2,3],[0,0], 1),-4.666666666666667)
+        self.assertAlmostEqual(self.logistic_regression.J_modified([[0],[1]],[0,1],[1,1], 1),-0.0596)
     
     def test_train(self):
-        train_x = [[0],[1],[2],[3],[4],[5],[6],[7]]
-        train_y = [2,3,4,5,6,7,8,9]
+        train_x = [[1],[2],[3],[2.5],[6],[7],[6.6],[6.7]]
+        train_y = [0,0,0,0,1,1,1,1]
+        INITIAL_ERROR = self.logistic_regression.J(train_x,train_y,[0,0])
         resulting_theta = self.logistic_regression.train(train_x,train_y)
-        test_y = [10,11,12,13,14,15,16,17]
+        test_y = [0,0,0,0,1,1,1,1]
         test_x = [[8],[9],[10],[11],[12],[13],[14],[15]]
-        self.assertLessEqual(self.logistic_regression.J(train_x,train_y,resulting_theta), self.logistic_regression.TARGET_ERROR)
+        self.assertLessEqual(self.logistic_regression.J(train_x,train_y,resulting_theta), INITIAL_ERROR)
        
 
 if __name__ == '__main__':
