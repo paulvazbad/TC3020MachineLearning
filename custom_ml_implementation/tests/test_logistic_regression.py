@@ -24,7 +24,7 @@ class TestLogisticRegression(unittest.TestCase):
 
     def test_J_modified(self):
         self.assertAlmostEqual(self.logistic_regression.J_modified(
-            [[0], [1]], [0, 1], [1, 1], 1), -0.0596)
+            [[0], [1]], [0, 1], [1, 1], 1), -0.059601461,5)
 
     def test_train(self):
         train_x = [[2], [2], [2], [2], [6], [6], [6.6], [6.7]]

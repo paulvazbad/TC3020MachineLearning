@@ -15,8 +15,7 @@ class LinearRegression():
     h(x) = theta_0 + theta_1*feature_0 + theta_n+1 * feature_n
     '''
     assert len(theta_values)==len(x)+1, "Number of features:" +str(len(x)+1) + "invalid to match hypothesis " + str(len(theta_values))
-    x_with_x0 =  x.copy()
-    x_with_x0.insert(0,1)
+    x_with_x0=np.insert(x,0,1)
     return np.matmul(x_with_x0,theta_values)
 
 
