@@ -55,3 +55,6 @@ class LogisticRegression(LinearRegression):
             total_sum+=temp
 
         return total_sum/(m)
+
+    def predict(self,input_value,theta_values):
+        return round(h(input_value, resulting_theta))

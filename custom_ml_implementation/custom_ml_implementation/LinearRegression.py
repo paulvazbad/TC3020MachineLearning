@@ -60,10 +60,12 @@ class LinearRegression():
 
     return total_sum/(m)
 
-  def gradient_descent(self,learning_factor,target_error,max_iter,x,y):
+  def gradient_descent(self,learning_factor,target_error,max_iter,initial_theta,x,y):
     #INITIALS
-    theta_values = [ 0 for i in x[0]]
-    theta_values.append(0)
+    theta_values = initial_theta
+    if(len(initial_theta)==0):
+      theta_values = [ 0 for i in x[0]]
+      theta_values.append(0)
     temp_theta_values = theta_values.copy()
 
     num_iter=0
@@ -75,8 +77,9 @@ class LinearRegression():
       # Calculate new theta_values
       print("-------------------")
       print("EPOCH: " + str(num_iter))
-      print("Theta_0: " + str(theta_values[0]))
-      print("Theta_1: " + str(theta_values[1]))
+      for index,theta in enumerate(theta_values):
+        print('Theta_'+str(index)+" :" + str(theta_values[index]))
+      
       print("Error:" + str(error))
 
 
@@ -112,15 +115,16 @@ class LinearRegression():
 
     return theta_values
 
-  def train(self,x,y):
+  def train(self,x,y,initial_theta=[]):
     '''
     Given array inputs x_0, x_1, x_n
     Returns a vector of coefficients theta_0, theta_1, thetha_n+1 that will be used as model.
     '''
-    resulting_theta = self.gradient_descent(self.LEARNING_RATE,self.TARGET_ERROR,self.MAX_ITER,x,y)
+    resulting_theta = self.gradient_descent(self.LEARNING_RATE,self.TARGET_ERROR,self.MAX_ITER,initial_theta,x,y)
     print("RESULT")
-    print("Theta 0: " + str(resulting_theta[0]))
-    print("Theta 1: " + str(resulting_theta[1]))
+    for index,theta in enumerate(theta_values):
+      print('Theta_'+str(index)+" :" + str(theta_values[index]))
+    
     return resulting_theta
 
   def get_normalized_value(self,value,mean,range):
