@@ -122,8 +122,8 @@ class LinearRegression():
     '''
     resulting_theta = self.gradient_descent(self.LEARNING_RATE,self.TARGET_ERROR,self.MAX_ITER,initial_theta,x,y)
     print("RESULT")
-    for index,theta in enumerate(theta_values):
-      print('Theta_'+str(index)+" :" + str(theta_values[index]))
+    for index,theta in enumerate(resulting_theta):
+      print('Theta_'+str(index)+" :" + str(resulting_theta[index]))
     
     return resulting_theta
 
