@@ -1,6 +1,7 @@
 import unittest
 from custom_ml_implementation.LogisticRegression import LogisticRegression
 
+
 class TestLogisticRegression(unittest.TestCase):
     def setUp(self):
         self.logistic_regression = LogisticRegression()
@@ -24,7 +25,7 @@ class TestLogisticRegression(unittest.TestCase):
 
     def test_J_modified(self):
         self.assertAlmostEqual(self.logistic_regression.J_modified(
-            [[0], [1]], [0, 1], [1, 1], 1), -0.059601461,5)
+            [[0], [1]], [0, 1], [1, 1], 1), -0.059601461, 5)
 
     def test_train(self):
         train_x = [[2], [2], [2], [2], [6], [6], [6.6], [6.7]]
@@ -39,11 +40,33 @@ class TestLogisticRegression(unittest.TestCase):
             train_x, train_y, resulting_theta), INITIAL_ERROR)
 
         # Validate thst classifier works
+        test_y = [0, 0, 0, 0, 0, 1, 1, 1, 1]
+        test_x = [[2], [2], [1], [1], [3], [5], [6], [7], [6.7]]
+        for index, test in enumerate(test_x):
+            pred = self.logistic_regression.h(test, resulting_theta)
+            self.assertEqual(
+                round(pred), test_y[index], "Wrong prediction after training :/")
+
+    def test_train_gamma(self):
+        train_x = [[2], [2], [2], [2], [6], [6], [6.6], [6.7]]
+        train_y = [0, 0, 0, 0, 1, 1, 1, 1]
+        INITIAL_ERROR = self.logistic_regression.J(train_x, train_y, [0, 0])
+        self.logistic_regression.LEARNING_RATE = 0.5
+        self.logistic_regression.MAX_ITER = 5000
+        # Here is gamma
+        self.gamma = 1
+        resulting_theta = self.logistic_regression.train(train_x, train_y)
+        test_y = [0, 0, 0, 0, 1, 1, 1, 1]
+        test_x = [[2], [2], [2], [2], [6], [6], [6.6], [6.7]]
+        self.assertLessEqual(self.logistic_regression.J(
+            train_x, train_y, resulting_theta), INITIAL_ERROR)
+
+        # Validate thst classifier works
         test_y = [0,0,0,0,0,1,1,1,1]
         test_x = [[2],[2],[1],[1],[3],[5],[6],[7],[6.7]]
         for index,test in enumerate(test_x):
             pred = self.logistic_regression.h(test,resulting_theta)
             self.assertEqual(round(pred),test_y[index], "Wrong prediction after training :/")
-       
+
 if __name__ == '__main__':
     unittest.main()
