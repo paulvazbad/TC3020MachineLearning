@@ -31,7 +31,7 @@ class HiddenLayer():
         return self.number_of_neurons
 
     def size_of_weights(self):
-        return self.neurons.size()
+        return (self.neurons.shape)
     
     def print_weights(self):
         print(self.neurons)
