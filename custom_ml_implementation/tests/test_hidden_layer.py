@@ -52,6 +52,17 @@ class TestHiddenLayer(unittest.TestCase):
                 print('x1: %d x2 : %d output: %d' % (x1, x2, output))
                 self.assertEquals(output, int(x1 and x2))
 
+    def test_error_function(self):
+        hidden_layer = HiddenLayer(2)
+        output_layer = HiddenLayer(2)
+        output_layer.connect(2)
+        # Test example seen in class
+        hidden_layer.set_a([0.593269992, 0.596884378])
+
+        # Set weights of the last layer
+        output_layer.set_neurons(np.array([[0.60,0.4,0.45],[0.60,0.50,0.55]]))
+        print(hidden_layer.calculate_error([0.741365069,-0.217071535], output_layer.neurons))
+        self.assertSequenceEqual(hidden_layer.calculate_error([0.741365069,-0.217071535], output_layer.neurons).tolist(), [0.045367008984756374, 0.05154539411422879])
 
 if __name__ == '__main__':
     unittest.main()

@@ -19,6 +19,8 @@ class HiddenLayer():
 
         '''
         self.number_of_neurons = number_of_neurons
+        self.a = []
+        self.current_delta = 0
 
     def connect(self, number_of_previous_layer_outputs):
         '''
@@ -35,6 +37,9 @@ class HiddenLayer():
     def set_neurons(self, neurons):
         self.neurons = neurons
 
+    def set_a(self,a):
+        self.a = a
+
     def size_of_weights(self):
         return (self.neurons.shape)
 
@@ -48,4 +53,12 @@ class HiddenLayer():
 
     def activation_function(self, inputs):
         z_s = self.z(inputs)
-        return [(1 / (1+math.exp(-(z)))) for z in z_s]
+        self.a = [(1 / (1+math.exp(-(z)))) for z in z_s]
+        return self.a
+
+    def calculate_error(self, delta_of_next_layer, weights_of_next_layer):
+        assert len(delta_of_next_layer)==self.number_of_neurons
+        neurons_without_bias = np.delete(weights_of_next_layer,0,1)
+        almost = np.matmul(np.transpose(neurons_without_bias), delta_of_next_layer)
+        self.current_delta =  almost * (self.a * (np.ones(self.number_of_neurons) - self.a))
+        return self.current_delta
