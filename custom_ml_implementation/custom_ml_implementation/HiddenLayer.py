@@ -29,6 +29,9 @@ class HiddenLayer():
 
     def get_number_of_neurons(self):
         return self.number_of_neurons
+    
+    def set_neurons(self,neurons):
+        self.neurons = neurons
 
     def size_of_weights(self):
         return (self.neurons.shape)
@@ -38,7 +41,9 @@ class HiddenLayer():
     
     # Operations
     def z(self,inputs):
-        np.matmul(self.neurons,inputs)
+        inputs_with_bias=np.insert(inputs,0,1)
+        return np.matmul(self.neurons,inputs_with_bias)
 
     def activation_function(self, inputs):
-        return(1 / (1+math.exp(- (self.z(inputs)))))
+        z_s = self.z(inputs) 
+        return [(1 / (1+math.exp(-(z)))) for z in z_s]

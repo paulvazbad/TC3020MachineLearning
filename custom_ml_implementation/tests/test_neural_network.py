@@ -1,4 +1,6 @@
 import unittest
+import numpy as np
+
 from custom_ml_implementation.NeuralNetwork import NeuralNetwork
 
 
@@ -21,9 +23,32 @@ class TestNeuralNetwork(unittest.TestCase):
         # Generates 3 outputs
         self.assertEqual(ann.layers[1].get_number_of_neurons(), 3)
 
+
+    def test_adding_hidden_layers(self):
+        '''
+        Verify that adding hidden layers work
+        '''
+        ann = NeuralNetwork(3, 3)
+        ann.addHiddenLayer(2)
+        expected_shape = [3,2,3]
+        for index,layer in enumerate(ann.layers):
+            self.assertEquals(layer.get_number_of_neurons(), expected_shape[index])
+
     def test_feed_forward(self):
         print('Feed forward test')
+        nn = NeuralNetwork(2,1) # 2 inputs, 1 output
+        nn.addHiddenLayer(2)
+        # Modify the weights 
+        layer_1_weights = np.array([[-30,20,20],[10,-20,-20]])
+        nn.layers[1].set_neurons(layer_1_weights)
+        output_layer_weights = np.array([[-10,20,20]])
+        nn.layers[2].set_neurons(output_layer_weights)
 
+        for x1 in range(0,2):
+            for x2 in range(0,2):
+                output = round(nn.feed_forward([x1,x2])[0])
+                #print('x1: %d x2 : %d output: %d'%(x1,x2,output))
+                self.assertEquals(output, int(not(bool(x1) != bool(x2))))
 
 if __name__ == '__main__':
     unittest.main()

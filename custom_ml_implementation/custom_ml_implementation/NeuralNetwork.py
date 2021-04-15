@@ -24,3 +24,16 @@ class NeuralNetwork():
             if(index > 0):
                 self.layers[index].connect(self.layers[index - 1].get_number_of_neurons())
                 
+
+    def addHiddenLayer(self, number_of_neurons):
+        self.layers.insert(len(self.layers) - 1,HiddenLayer(number_of_neurons))
+        self.connect_all_layers()
+
+
+    def feed_forward(self,input_data):
+        a = input_data
+        for index,layer in enumerate(self.layers):
+            a = layer.activation_function(a)
+            #print("output layer_%d "%(index))
+            #print(a)
+        return a
