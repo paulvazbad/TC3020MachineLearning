@@ -51,5 +51,17 @@ class TestNeuralNetwork(unittest.TestCase):
                 self.assertEquals(output, int(not(bool(x1) != bool(x2))))
 
 
+    def test_backpropagation(self):
+        nn = NeuralNetwork(2,2)
+        nn.addHiddenLayer(2)
+        # Example seen in class
+        nn.output_layer().set_neurons(np.array([[0.60,0.4,0.45],[0.60,0.50,0.55]]))
+        nn.output_layer().print_weights()
+        nn.layers[1].set_neurons(np.array([[0.35,0.15,0.20],[0.35,0.25,0.30]]))
+        nn.layers[1].print_weights()
+        input_examples = [[0.05,0.10]]
+        ouput_example = [0.01,0.99]
+        nn.backpropagation(input_examples,ouput_example)
+
 if __name__ == '__main__':
     unittest.main()

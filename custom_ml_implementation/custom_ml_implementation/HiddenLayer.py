@@ -20,7 +20,8 @@ class HiddenLayer():
         '''
         self.number_of_neurons = number_of_neurons
         self.a = []
-        self.current_delta = 0
+        self.current_sigma = []
+        
 
     def connect(self, number_of_previous_layer_outputs):
         '''
@@ -28,8 +29,9 @@ class HiddenLayer():
         Must be called before any operation
         '''
         bias_neuron = 1
-        self.neurons = np.ones(
-            (self.number_of_neurons, number_of_previous_layer_outputs + bias_neuron))
+        self.neurons = np.random.rand(self.number_of_neurons, number_of_previous_layer_outputs + bias_neuron)
+        print(self.neurons)
+        self.delta = np.zeros((self.number_of_neurons, number_of_previous_layer_outputs)) # No bias in delta
 
     def get_number_of_neurons(self):
         return self.number_of_neurons
@@ -53,12 +55,22 @@ class HiddenLayer():
 
     def activation_function(self, inputs):
         z_s = self.z(inputs)
-        self.a = [(1 / (1+math.exp(-(z)))) for z in z_s]
+        self.a = np.array([(1 / (1+math.exp(-(z)))) for z in z_s])
         return self.a
 
-    def calculate_error(self, delta_of_next_layer, weights_of_next_layer):
-        assert len(delta_of_next_layer)==self.number_of_neurons
+    def calculate_error(self, sigma_of_next_layer, weights_of_next_layer):
+        assert len(sigma_of_next_layer)==self.number_of_neurons
         neurons_without_bias = np.delete(weights_of_next_layer,0,1)
-        almost = np.matmul(np.transpose(neurons_without_bias), delta_of_next_layer)
-        self.current_delta =  almost * (self.a * (np.ones(self.number_of_neurons) - self.a))
-        return self.current_delta
+        almost = np.matmul(np.transpose(neurons_without_bias), sigma_of_next_layer)
+        self.current_sigma =  almost * (self.a * (np.ones(self.number_of_neurons) - self.a))
+        return self.current_sigma
+    
+    def calculate_and_set_delta(self,a_of_previous_layer):
+        '''
+        TODO: Fix this, it should use a of the previous layer and sigma of the current one
+        '''
+        neurons_shape = self.neurons.shape
+        print(neurons_shape)
+        for i in range (0, neurons_shape[0]):
+            for j in range(0,neurons_shape[1]):
+                print("%d %d"%(i,j))

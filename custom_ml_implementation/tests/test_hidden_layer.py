@@ -7,6 +7,7 @@ class TestHiddenLayer(unittest.TestCase):
     def setUp(self):
         self.hidden_layer = HiddenLayer(3)
         self.hidden_layer.connect(3)
+        self.hidden_layer.set_neurons(np.array([[1,1,1,1],[1,1,1,1],[1,1,1,1]]))
 
     def test_correct_weight_matrix_shape(self):
         previous_layer_number_neurons = 3
@@ -37,7 +38,7 @@ class TestHiddenLayer(unittest.TestCase):
         a = np.arange(3)
         print(a)
         self.assertSequenceEqual(self.hidden_layer.activation_function(
-            a), [0.9820137900379085, 0.9820137900379085, 0.9820137900379085])
+            a).tolist(), [0.9820137900379085, 0.9820137900379085, 0.9820137900379085])
 
     def test_AND_example(self):
         hidden_layer = HiddenLayer(1)
