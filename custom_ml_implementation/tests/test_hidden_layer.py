@@ -62,8 +62,21 @@ class TestHiddenLayer(unittest.TestCase):
 
         # Set weights of the last layer
         output_layer.set_neurons(np.array([[0.60,0.4,0.45],[0.60,0.50,0.55]]))
-        print(hidden_layer.calculate_error([0.741365069,-0.217071535], output_layer.neurons))
         self.assertSequenceEqual(hidden_layer.calculate_error([0.741365069,-0.217071535], output_layer.neurons).tolist(), [0.045367008984756374, 0.05154539411422879])
+
+
+    def test_calculate_and_set_delta(self):
+        '''
+        Verifies the shape of the deltas equals the shape of the weights
+        '''
+
+        # mock a previous layer with 3 neurons
+        output_layer = HiddenLayer(2)
+        output_layer.connect(3)
+
+        output_layer.calculate_and_set_delta([1,1,1])
+        self.assertEquals(output_layer.delta.shape,output_layer.neurons.shape)
+
 
 if __name__ == '__main__':
     unittest.main()

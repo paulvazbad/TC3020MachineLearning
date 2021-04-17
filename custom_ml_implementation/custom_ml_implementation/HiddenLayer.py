@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 class HiddenLayer():
     '''
     HiddenLayer of an Artificial Neural Network
-    Has one main attribute: 
+    Has one main attribute:
         - Neurons (each represented as a vector of 1 dimensional weights)
     Can perform several operations on them:
     '''
@@ -21,7 +21,6 @@ class HiddenLayer():
         self.number_of_neurons = number_of_neurons
         self.a = []
         self.current_sigma = []
-        
 
     def connect(self, number_of_previous_layer_outputs):
         '''
@@ -29,9 +28,11 @@ class HiddenLayer():
         Must be called before any operation
         '''
         bias_neuron = 1
-        self.neurons = np.random.rand(self.number_of_neurons, number_of_previous_layer_outputs + bias_neuron)
-        print(self.neurons)
-        self.delta = np.zeros((self.number_of_neurons, number_of_previous_layer_outputs)) # No bias in delta
+        self.neurons = np.random.rand(
+            self.number_of_neurons, number_of_previous_layer_outputs + bias_neuron)
+        # print(self.neurons)
+        # Experiment: bias also has delta
+        self.delta = np.zeros(self.neurons.shape)
 
     def get_number_of_neurons(self):
         return self.number_of_neurons
@@ -39,7 +40,7 @@ class HiddenLayer():
     def set_neurons(self, neurons):
         self.neurons = neurons
 
-    def set_a(self,a):
+    def set_a(self, a):
         self.a = a
 
     def size_of_weights(self):
@@ -59,18 +60,24 @@ class HiddenLayer():
         return self.a
 
     def calculate_error(self, sigma_of_next_layer, weights_of_next_layer):
-        assert len(sigma_of_next_layer)==self.number_of_neurons
-        neurons_without_bias = np.delete(weights_of_next_layer,0,1)
-        almost = np.matmul(np.transpose(neurons_without_bias), sigma_of_next_layer)
-        self.current_sigma =  almost * (self.a * (np.ones(self.number_of_neurons) - self.a))
+        #assert len(sigma_of_next_layer) == self.number_of_neurons
+        neurons_without_bias = np.delete(weights_of_next_layer, 0, 1)
+        g = (self.a * (np.ones(self.number_of_neurons) - self.a))
+        self.current_sigma = np.matmul(np.transpose(
+            neurons_without_bias), sigma_of_next_layer) * g
         return self.current_sigma
-    
-    def calculate_and_set_delta(self,a_of_previous_layer):
+
+    def calculate_and_set_delta(self, a_of_previous_layer):
         '''
-        TODO: Fix this, it should use a of the previous layer and sigma of the current one
+        TODO: implement this
         '''
-        neurons_shape = self.neurons.shape
-        print(neurons_shape)
-        for i in range (0, neurons_shape[0]):
-            for j in range(0,neurons_shape[1]):
-                print("%d %d"%(i,j))
+        #print(self.current_sigma * np.transpose(a_of_previous_layer))
+        #new_delta = self.delta + self.current_sigma * np.transpose(a_of_previous_layer)
+        # print(new_delta)
+        # Insert BIAS into a of previous layer so we can get the delta of the bias in this layer
+        a_of_previous_layer_with_bias = np.insert(a_of_previous_layer, 0, 1)
+        for i in range(0, len(self.current_sigma)):
+            for j in range(0, len(a_of_previous_layer_with_bias)):
+                # Generate delta of weight
+                self.delta[i][j] = a_of_previous_layer_with_bias[j] * \
+                    self.current_sigma[i]

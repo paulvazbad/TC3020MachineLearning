@@ -53,6 +53,10 @@ class NeuralNetwork():
                 sigma_of_next_layer, weights_of_next_layer)
 
             # Also update the delta of this layer
+            # Since the weights belong to the layer they GO TO not the layer 
+            # they COME FROM
+            # we dont do: delta(l) = delta(l) + a(l)error(l+1)
+            # we must use: delta(l) = delta(l) + a(l-1)error(l)
             self.layers[i].calculate_and_set_delta(self.layers[i - 1].a)
 
             weights_of_next_layer = self.layers[i].neurons

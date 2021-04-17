@@ -18,4 +18,5 @@ class OutputLayer(HiddenLayer):
     # Operations
     def calculate_error(self, outputs):
         # Returns the same input but with bias neuron
-        return self.a - np.array(outputs)
+        self.current_sigma = self.a - np.array(outputs)
+        return self.current_sigma

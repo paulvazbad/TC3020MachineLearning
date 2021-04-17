@@ -21,5 +21,5 @@ class InputLayer(HiddenLayer):
     # Operations
     def activation_function(self, inputs):
         # Returns the same input but with bias neuron
-        self.a = inputs
-        return inputs
+        self.a = np.array(inputs)
+        return np.array(inputs)
