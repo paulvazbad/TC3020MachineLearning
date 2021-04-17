@@ -39,7 +39,7 @@ class NeuralNetwork():
         for index, layer in enumerate(self.layers):
             a = layer.activation_function(a)
             # weights only available in HiddenLayer and OutputLayer
-            if(update_weights and index >0):
+            if(update_weights and index > 0):
                 layer.update_weights_with_deltas(
                     number_of_examples_used, self.learning_rate, self.reg_factor)
             #print("output layer_%d "%(index))
@@ -70,16 +70,25 @@ class NeuralNetwork():
             i -= 1
 
     def backpropagation(self, input_examples, output_examples):
-        print(len(input_examples),len(output_examples))
         assert(len(input_examples) == len(output_examples))
-        #First iteration dont update weights yet
+        # First iteration dont update weights yet
         update_weights = False
         for index, example in enumerate(input_examples):
-            print("Backpropagation with example %d"%(index))
-            self.feed_forward(example, update_weights, len(input_examples), 1)
+            #print("Backpropagation with example %d" % (index))
+            self.feed_forward(example, update_weights, len(input_examples))
             self.update_deltas(output_examples[index])
             update_weights = True
-    
+
+        # Print error in last layer after this backpropagation iteration
+        print("Error in last layer")
+        print(self.output_layer().current_sigma)
+
+    def train(self, input_examples, output_examples, learning_rate, reg_factor, epochs):
+        self.learning_rate = learning_rate
+        self.reg_factor = reg_factor
+        for i in range(0, epochs):
+            print("---EPOCH: %d---"%i)
+            self.backpropagation(input_examples, output_examples)
     
     # Access for testing
     def output_layer(self):
