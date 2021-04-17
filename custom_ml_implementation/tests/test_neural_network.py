@@ -60,8 +60,8 @@ class TestNeuralNetwork(unittest.TestCase):
         nn.layers[1].set_neurons(
             np.array([[0.35, 0.15, 0.20], [0.35, 0.25, 0.30]]))
         nn.layers[1].print_weights()
-        input_examples = [[0.05, 0.10]]
-        ouput_example = [0.01, 0.99]
+        input_examples = [[0.05, 0.10], [0.05, 0.10]]
+        ouput_example = [[0.01, 0.99], [0.01, 0.99]]
         nn.backpropagation(input_examples, ouput_example)
 
     def test_backpropagation_different_sizes(self):
@@ -69,8 +69,8 @@ class TestNeuralNetwork(unittest.TestCase):
         # output_layer size != hidden_layer_size
         nn = NeuralNetwork(2, 2)
         nn.addHiddenLayer(3)
-        input_examples = [[0.05, 0.10]]
-        ouput_example = [0.01, 0.99]
+        input_examples = [[0.05, 0.10], [0.05, 0.10]]
+        ouput_example = [[0.01, 0.99], [0.01, 0.99]]
         nn.backpropagation(input_examples, ouput_example)
 
 

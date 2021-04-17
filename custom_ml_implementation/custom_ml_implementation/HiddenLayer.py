@@ -79,5 +79,21 @@ class HiddenLayer():
         for i in range(0, len(self.current_sigma)):
             for j in range(0, len(a_of_previous_layer_with_bias)):
                 # Generate delta of weight
-                self.delta[i][j] = a_of_previous_layer_with_bias[j] * \
+                self.delta[i][j] = self.delta[i][j] + a_of_previous_layer_with_bias[j] * \
                     self.current_sigma[i]
+
+
+    def update_weights_with_deltas(self, number_of_examples_used, learning_rate=1, reg_factor=1):
+        '''
+        TODO: add test of this function
+        '''
+        D = self.delta / number_of_examples_used
+        #print("D of bias (deltas/examples)")
+        # Add regularization
+        D[:,0]+= reg_factor*self.neurons[:,0]
+        #print("D of bias after regularization")
+        self.update_weights(D*learning_rate)
+
+
+    def update_weights(self,D_with_learning_rate):
+        self.neurons = self.neurons - D_with_learning_rate

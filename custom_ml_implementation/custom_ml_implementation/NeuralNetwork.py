@@ -16,6 +16,8 @@ class NeuralNetwork():
         self.layers.append(InputLayer(input_layer_size))  # InputLayer
         self.layers.append(OutputLayer(output_layer_size))  # OutputLayer
         self.connect_all_layers()
+        self.learning_rate = 0
+        self.reg_factor = 0
 
     def connect_all_layers(self):
         '''
@@ -32,10 +34,14 @@ class NeuralNetwork():
                            HiddenLayer(number_of_neurons))
         self.connect_all_layers()
 
-    def feed_forward(self, input_data):
+    def feed_forward(self, input_data, update_weights=False, number_of_examples_used=1):
         a = input_data
         for index, layer in enumerate(self.layers):
             a = layer.activation_function(a)
+            # weights only available in HiddenLayer and OutputLayer
+            if(update_weights and index >0):
+                layer.update_weights_with_deltas(
+                    number_of_examples_used, self.learning_rate, self.reg_factor)
             #print("output layer_%d "%(index))
             # print(a)
         return a
@@ -53,7 +59,7 @@ class NeuralNetwork():
                 sigma_of_next_layer, weights_of_next_layer)
 
             # Also update the delta of this layer
-            # Since the weights belong to the layer they GO TO not the layer 
+            # Since the weights belong to the layer they GO TO not the layer
             # they COME FROM
             # we dont do: delta(l) = delta(l) + a(l)error(l+1)
             # we must use: delta(l) = delta(l) + a(l-1)error(l)
@@ -61,13 +67,20 @@ class NeuralNetwork():
 
             weights_of_next_layer = self.layers[i].neurons
             sigma_of_next_layer = self.layers[i].current_sigma
-            i-=1
+            i -= 1
 
-    def backpropagation(self, input_examples, output_example):
-        for example in input_examples:
-            self.feed_forward(example)
-            self.update_deltas(output_example)
-
+    def backpropagation(self, input_examples, output_examples):
+        print(len(input_examples),len(output_examples))
+        assert(len(input_examples) == len(output_examples))
+        #First iteration dont update weights yet
+        update_weights = False
+        for index, example in enumerate(input_examples):
+            print("Backpropagation with example %d"%(index))
+            self.feed_forward(example, update_weights, len(input_examples), 1)
+            self.update_deltas(output_examples[index])
+            update_weights = True
+    
+    
     # Access for testing
     def output_layer(self):
         return self.layers[-1]
