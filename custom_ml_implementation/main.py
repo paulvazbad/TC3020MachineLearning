@@ -14,16 +14,20 @@ def main():
     print(labels[0])
     EPOCHS = 150
     LEARNING_RATE = 0.05
-    REGULARIZATION = 0.5
+    REGULARIZATION = 0.00005
     nn = NeuralNetwork(2, 1)
+    nn.addHiddenLayer(2)
+    nn.addHiddenLayer(4)
+    nn.addHiddenLayer(2)
+    nn.addHiddenLayer(4)
     nn.addHiddenLayer(2)
     nn.train(np.array(features), np.array(labels),
              LEARNING_RATE, REGULARIZATION, EPOCHS)
     
     nn.print_weights()
-    print(nn.predict([0.01, 0.01]), "Expected 0")
-    print(nn.predict([0.01, 1.0]), "Expected 1")
-    print(nn.predict([1.0, 0.01]), "Expected 1")
+    print(nn.predict([0.001, 0.001]), "Expected 0")
+    print(nn.predict([0.001, 1.0]), "Expected 1")
+    print(nn.predict([1.0, 0.001]), "Expected 1")
     print(nn.predict([1.0, 1.0]), "Expected 0")
     
 

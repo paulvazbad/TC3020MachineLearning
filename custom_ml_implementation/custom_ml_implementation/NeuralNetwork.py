@@ -80,8 +80,8 @@ class NeuralNetwork():
             update_weights = True
 
         # Print error in last layer after this backpropagation iteration
-        print("Error in last layer")
-        print(self.output_layer().current_sigma)
+        print("Cost: ")
+        print(self.cost_function(input_examples, output_examples))
 
     def train(self, input_examples, output_examples, learning_rate, reg_factor, epochs):
         self.learning_rate = learning_rate
@@ -102,6 +102,30 @@ class NeuralNetwork():
                 print("Weights of layer %d" % index)
                 layer.print_weights()
 
+    def cost_function(self, input_examples, output_examples):
+        total_cost = 0
+        m = len(input_examples)
+        for index, example in enumerate(input_examples):
+            h_s = self.predict(input_examples[index])
+            y_ks = [output_examples[index]]
+
+            for index,y_k in enumerate(y_ks):
+                h = h_s[index]
+                y_k = y_ks[index]
+                total_cost+= y_k*math.log(h) + (1 - y_k)*math.log(1-h)
+        
+        total_cost = (-1/m) * total_cost
+        #print("Total cost without regul")
+        #print(total_cost)
+        # Regularization
+        neurons_sum = 0
+        for index, layer in enumerate(self.layers):
+            if(index > 0):
+                for neuron in layer.neurons:
+                    neurons_sum+= np.sum(np.square(neuron))
+
+        return total_cost + (self.reg_factor/(2*m))*neurons_sum
     # Access for testing
+
     def output_layer(self):
         return self.layers[-1]

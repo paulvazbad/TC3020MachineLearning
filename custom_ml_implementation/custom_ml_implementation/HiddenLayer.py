@@ -71,9 +71,6 @@ class HiddenLayer():
         '''
         TODO: implement this
         '''
-        #print(self.current_sigma * np.transpose(a_of_previous_layer))
-        #new_delta = self.delta + self.current_sigma * np.transpose(a_of_previous_layer)
-        # print(new_delta)
         # Insert BIAS into a of previous layer so we can get the delta of the bias in this layer
         a_of_previous_layer_with_bias = np.insert(a_of_previous_layer, 0, 1)
         for i in range(0, len(self.current_sigma)):
@@ -86,11 +83,16 @@ class HiddenLayer():
     def update_weights_with_deltas(self, number_of_examples_used, learning_rate=1, reg_factor=1):
         '''
         TODO: add test of this function
+        TODO: check this
         '''
         D = self.delta / number_of_examples_used
         #print("D of bias (deltas/examples)")
+        #print("before regularization")
+        #print(D)
         # Add regularization
-        D[:,0]+= reg_factor*self.neurons[:,0]
+        D[:,1:]+= reg_factor*self.neurons[:,1:]
+        #print("After regularization")
+        #print(D)
         #print("D of bias after regularization")
         self.update_weights(D*learning_rate)
 

@@ -70,13 +70,34 @@ class TestHiddenLayer(unittest.TestCase):
         Verifies the shape of the deltas equals the shape of the weights
         '''
 
-        # mock a previous layer with 3 neurons
+       # layer with 2 neurons
         output_layer = HiddenLayer(2)
+        # mock a previous layer with 3 neurons
         output_layer.connect(3)
-
         output_layer.calculate_and_set_delta([1,1,1])
         self.assertEquals(output_layer.delta.shape,output_layer.neurons.shape)
+        print(output_layer.delta)
+       
+    def test_update_weigths_with_deltas(self):
+        # layer with 2 neurons
+        output_layer = HiddenLayer(2)
+        # mock a previous layer with 3 neurons
+        output_layer.connect(3)
+        output_layer.calculate_and_set_delta([1,1,1])
+        self.assertEquals(output_layer.delta.shape,output_layer.neurons.shape)
+        print(output_layer.delta)
 
+        # Test that the reg factor is considered correctly
+        reg_factor = 0.1
+        D = output_layer.delta
+        print("D of layer")
+        print(D)
+        print(D[:,1:])
+        number_of_examples_used = 2
+        learning_rate = 1
+        reg_factor = 0.1
+        output_layer.update_weights_with_deltas(number_of_examples_used,learning_rate,reg_factor)
+       
 
 if __name__ == '__main__':
     unittest.main()
