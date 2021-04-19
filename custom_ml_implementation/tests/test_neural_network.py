@@ -76,6 +76,7 @@ class TestNeuralNetwork(unittest.TestCase):
     def test_train(self):
         nn = NeuralNetwork(2, 2)
         nn.addHiddenLayer(2)
+        nn.addHiddenLayer(2)
         max_examples = 10
         outputs = []
         inputs = []
@@ -91,10 +92,14 @@ class TestNeuralNetwork(unittest.TestCase):
     def test_train_xor(self):
         nn = NeuralNetwork(2, 1)
         nn.addHiddenLayer(2)
+        nn.addHiddenLayer(2)
+        nn.addHiddenLayer(4)
         inputs = [[0,0],[0,1],[1,0],[1,1]]
         outputs = [[0],[1],[1],[0]]
         EPOCHS = 200
-        nn.train(np.array(inputs), np.array(outputs), 0.5, 0.5, EPOCHS)
+        LEARNING_RATE = 0.8
+        REGULARIZATION = 0.5
+        nn.train(np.array(inputs), np.array(outputs), LEARNING_RATE, REGULARIZATION, EPOCHS)
         print("Result predictions" )
         print(nn.feed_forward([0, 0]),"Expected 0")
         print(nn.feed_forward([0, 1]),"Expected 1")
