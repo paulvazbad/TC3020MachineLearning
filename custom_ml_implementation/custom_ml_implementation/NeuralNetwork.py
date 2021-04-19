@@ -42,7 +42,7 @@ class NeuralNetwork():
             if(update_weights and index > 0):
                 layer.update_weights_with_deltas(
                     number_of_examples_used, self.learning_rate, self.reg_factor)
-            #print("output layer_%d "%(index))
+            # print("output layer_%d "%(index))
             # print(a)
         return a
 
@@ -74,7 +74,7 @@ class NeuralNetwork():
         # First iteration dont update weights yet
         update_weights = False
         for index, example in enumerate(input_examples):
-            #print("Backpropagation with example %d" % (index))
+            # print("Backpropagation with example %d" % (index))
             self.feed_forward(example, update_weights, len(input_examples))
             self.update_deltas(output_examples[index])
             update_weights = True
@@ -87,9 +87,21 @@ class NeuralNetwork():
         self.learning_rate = learning_rate
         self.reg_factor = reg_factor
         for i in range(0, epochs):
-            print("---EPOCH: %d---"%i)
+            print("---EPOCH: %d---" % i)
             self.backpropagation(input_examples, output_examples)
-    
+
+    def predict(self, input_data):
+        a = input_data
+        for index, layer in enumerate(self.layers):
+            a = layer.activation_function(a)
+        return a
+
+    def print_weights(self):
+        for index, layer in enumerate(self.layers):
+            if(index > 0):
+                print("Weights of layer %d" % index)
+                layer.print_weights()
+
     # Access for testing
     def output_layer(self):
         return self.layers[-1]
