@@ -39,6 +39,7 @@ class HiddenLayer():
 
     def set_neurons(self, neurons):
         self.neurons = neurons
+        self.number_of_neurons = self.neurons.shape[0]
 
     def set_a(self, a):
         self.a = a

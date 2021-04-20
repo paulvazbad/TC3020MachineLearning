@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import os
 
 from custom_ml_implementation.NeuralNetwork import NeuralNetwork
 
@@ -116,11 +117,13 @@ class TestNeuralNetwork(unittest.TestCase):
         nn.layers[1].set_neurons(
             np.array([[0.35, 0.15, 0.20], [0.35, 0.25, 0.30]]))
         nn.layers[1].print_weights()
-        nn.save_model("test_model.csv")
+        nn.save_model("test_model")
         # Read if and verify that it is correct
         model = NeuralNetwork(2,2)
-        model.load_model("test_model.csv")
-
-
+        model.load_model("test_model")
+        model.print_weights()
+        
+        self.assertSequenceEqual(nn.predict([1,1]).tolist(), model.predict([1,1]).tolist())
+        os.remove("./models/test_model.csv")
 if __name__ == '__main__':
     unittest.main()

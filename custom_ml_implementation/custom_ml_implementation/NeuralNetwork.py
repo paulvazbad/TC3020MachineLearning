@@ -140,13 +140,10 @@ class NeuralNetwork():
         with open(f'./models/{model_name}.csv', 'w', newline='') as file:
             mywriter = csv.writer(file, delimiter=',')
             for index,layer in enumerate(self.layers):
-                #Create pandas dataframe to export
-                # inputs outputs 
                 if(index > 0):
                     shape = layer.neurons.shape
                     shape_info = [shape[0],shape[1]]
                     row = shape_info + layer.neurons.reshape(-1).tolist()
-                    print(row)
                     mywriter.writerow(row)
 
     def load_model(self,model_name):
@@ -155,10 +152,16 @@ class NeuralNetwork():
             return 
         with open(f'./models/{model_name}.csv', 'r', newline='') as file:
             myreader = csv.reader(file, delimiter=',',quoting=csv.QUOTE_NONNUMERIC)
+            num_layers = myreader.line_num
             for row in myreader:
-                print(row)
-
-
+                shape = (int(row[0]),int(row[1]))
+                neurons = np.array(row[2:])
+                new_layer = HiddenLayer()
+                new_layer.set_neurons(neurons.reshape(shape))
+                self.layers.insert(len(self.layers) - 1, new_layer)
+            # Deal with the output layer
+            last_one = self.layers.pop(len(self.layers) - 2)
+            self.output_layer().set_neurons(last_one.neurons)
 
     # Access for testing
     def output_layer(self):
