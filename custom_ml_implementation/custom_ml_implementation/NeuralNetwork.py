@@ -115,8 +115,8 @@ class NeuralNetwork():
                 total_cost+= y_k*math.log(h) + (1 - y_k)*math.log(1-h)
         
         total_cost = (-1/m) * total_cost
-        print("Total cost without regul")
-        print(total_cost)
+        #print("Total cost without regul")
+        #print(total_cost)
         # Regularization
         neurons_sum = 0
         for index, layer in enumerate(self.layers):

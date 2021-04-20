@@ -76,8 +76,10 @@ class HiddenLayer():
         for i in range(0, len(self.current_sigma)):
             for j in range(0, len(a_of_previous_layer_with_bias)):
                 # Generate delta of weight
-                self.delta[i][j] = self.delta[i][j] + a_of_previous_layer_with_bias[j] * \
-                    self.current_sigma[i]
+                # DONT UPDATE BIAS DELTAS
+                if(j>0):
+                    self.delta[i][j] = self.delta[i][j] + a_of_previous_layer_with_bias[j] * \
+                        self.current_sigma[i]
 
 
     def update_weights_with_deltas(self, number_of_examples_used, learning_rate=1, reg_factor=1):

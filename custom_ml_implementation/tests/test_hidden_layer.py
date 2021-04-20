@@ -81,7 +81,7 @@ class TestHiddenLayer(unittest.TestCase):
         output_layer.calculate_and_set_delta([0.593269992, 0.596884378])
         self.assertSequenceEqual(output_layer.delta[:, 0].tolist(), [
                                   0.741365069, -0.217071535])
-
+        print(output_layer.delta)
         self.assertEquals(output_layer.delta.shape, output_layer.neurons.shape)
 
     def test_update_weigths_with_deltas(self):
@@ -100,6 +100,7 @@ class TestHiddenLayer(unittest.TestCase):
         output_layer.calculate_and_set_delta([0.593269992, 0.596884378])
         output_layer.set_neurons(
             np.array([[0.60, 0.4, 0.45], [0.60, 0.50, 0.55]])) 
+        output_layer.print_weights()
         output_layer.update_weights_with_deltas(
             number_of_examples_used, learning_rate, reg_factor)
         output_layer.print_weights()

@@ -12,13 +12,10 @@ def main():
     print(features[0])
     labels = df['label'].values
     print(labels[0])
-    EPOCHS = 100
-    LEARNING_RATE = 0.05
-    REGULARIZATION = 1
+    EPOCHS = 2000
+    LEARNING_RATE = 0.9
+    REGULARIZATION = 0.5
     nn = NeuralNetwork(2, 1)
-    nn.addHiddenLayer(2)
-    nn.addHiddenLayer(4)
-    nn.addHiddenLayer(5)
     nn.addHiddenLayer(2)
     nn.train(np.array(features), np.array(labels),
              LEARNING_RATE, REGULARIZATION, EPOCHS)
