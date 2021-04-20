@@ -37,11 +37,11 @@ class NeuralNetwork():
     def feed_forward(self, input_data, update_weights=False, number_of_examples_used=1):
         a = input_data
         for index, layer in enumerate(self.layers):
-            a = layer.activation_function(a)
             # weights only available in HiddenLayer and OutputLayer
             if(update_weights and index > 0):
                 layer.update_weights_with_deltas(
                     number_of_examples_used, self.learning_rate, self.reg_factor)
+            a = layer.activation_function(a)
             # print("output layer_%d "%(index))
             # print(a)
         return a
@@ -115,15 +115,17 @@ class NeuralNetwork():
                 total_cost+= y_k*math.log(h) + (1 - y_k)*math.log(1-h)
         
         total_cost = (-1/m) * total_cost
-        #print("Total cost without regul")
-        #print(total_cost)
+        print("Total cost without regul")
+        print(total_cost)
         # Regularization
         neurons_sum = 0
         for index, layer in enumerate(self.layers):
             if(index > 0):
-                for neuron in layer.neurons:
-                    neurons_sum+= np.sum(np.square(neuron))
-
+                neurons = layer.neurons
+                neurons = neurons[:,1:]
+                neurons_sum+= np.sum(np.square(neurons))
+        # REMOVE THIS FOR NOW
+        neurons_sum = 0
         return total_cost + (self.reg_factor/(2*m))*neurons_sum
     # Access for testing
 

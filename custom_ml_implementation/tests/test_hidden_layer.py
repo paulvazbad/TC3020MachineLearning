@@ -7,7 +7,8 @@ class TestHiddenLayer(unittest.TestCase):
     def setUp(self):
         self.hidden_layer = HiddenLayer(3)
         self.hidden_layer.connect(3)
-        self.hidden_layer.set_neurons(np.array([[1,1,1,1],[1,1,1,1],[1,1,1,1]]))
+        self.hidden_layer.set_neurons(
+            np.array([[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]))
 
     def test_correct_weight_matrix_shape(self):
         previous_layer_number_neurons = 3
@@ -61,9 +62,10 @@ class TestHiddenLayer(unittest.TestCase):
         hidden_layer.set_a([0.593269992, 0.596884378])
 
         # Set weights of the last layer
-        output_layer.set_neurons(np.array([[0.60,0.4,0.45],[0.60,0.50,0.55]]))
-        self.assertSequenceEqual(hidden_layer.calculate_error([0.741365069,-0.217071535], output_layer.neurons).tolist(), [0.045367008984756374, 0.05154539411422879])
-
+        output_layer.set_neurons(
+            np.array([[0.60, 0.4, 0.45], [0.60, 0.50, 0.55]]))
+        self.assertSequenceEqual(hidden_layer.calculate_error(
+            [0.741365069, -0.217071535], output_layer.neurons).tolist(), [0.045367008984756374, 0.05154539411422879])
 
     def test_calculate_and_set_delta(self):
         '''
@@ -73,31 +75,34 @@ class TestHiddenLayer(unittest.TestCase):
        # layer with 2 neurons
         output_layer = HiddenLayer(2)
         # mock a previous layer with 3 neurons
-        output_layer.connect(3)
-        output_layer.calculate_and_set_delta([1,1,1])
-        self.assertEquals(output_layer.delta.shape,output_layer.neurons.shape)
-        print(output_layer.delta)
-       
+        output_layer.connect(2)
+        # Example seen in class (slide 14)
+        output_layer.current_sigma = np.array([0.741365069, -0.217071535])
+        output_layer.calculate_and_set_delta([0.593269992, 0.596884378])
+        self.assertSequenceEqual(output_layer.delta[:, 0].tolist(), [
+                                  0.741365069, -0.217071535])
+
+        self.assertEquals(output_layer.delta.shape, output_layer.neurons.shape)
+
     def test_update_weigths_with_deltas(self):
         # layer with 2 neurons
         output_layer = HiddenLayer(2)
         # mock a previous layer with 3 neurons
-        output_layer.connect(3)
-        output_layer.calculate_and_set_delta([1,1,1])
-        self.assertEquals(output_layer.delta.shape,output_layer.neurons.shape)
-        print(output_layer.delta)
+        output_layer.connect(2)
+        output_layer.calculate_and_set_delta([1, 1, 1])
+        self.assertEquals(output_layer.delta.shape, output_layer.neurons.shape)
 
         # Test that the reg factor is considered correctly
-        reg_factor = 0.1
-        D = output_layer.delta
-        print("D of layer")
-        print(D)
-        print(D[:,1:])
-        number_of_examples_used = 2
-        learning_rate = 1
-        reg_factor = 0.1
-        output_layer.update_weights_with_deltas(number_of_examples_used,learning_rate,reg_factor)
-       
+        number_of_examples_used = 1
+        learning_rate = 0.5
+        reg_factor = 0.0
+        output_layer.current_sigma = np.array([0.741365069, -0.217071535])
+        output_layer.calculate_and_set_delta([0.593269992, 0.596884378])
+        output_layer.set_neurons(
+            np.array([[0.60, 0.4, 0.45], [0.60, 0.50, 0.55]])) 
+        output_layer.update_weights_with_deltas(
+            number_of_examples_used, learning_rate, reg_factor)
+        output_layer.print_weights()
 
 if __name__ == '__main__':
     unittest.main()
