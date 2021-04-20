@@ -1,4 +1,6 @@
 import math
+import csv
+import os
 
 import numpy as np
 import pandas as pd
@@ -127,7 +129,37 @@ class NeuralNetwork():
         # REMOVE THIS FOR NOW
         neurons_sum = 0
         return total_cost + (self.reg_factor/(2*m))*neurons_sum
-    # Access for testing
+    
+    def save_model(self, model_name=None):
+        if(not model_name):
+            model_name = input('please provide a name for the model: ')
+        
+        if not os.path.exists('models'):
+            os.makedirs('models')
+        
+        with open(f'./models/{model_name}.csv', 'w', newline='') as file:
+            mywriter = csv.writer(file, delimiter=',')
+            for index,layer in enumerate(self.layers):
+                #Create pandas dataframe to export
+                # inputs outputs 
+                if(index > 0):
+                    shape = layer.neurons.shape
+                    shape_info = [shape[0],shape[1]]
+                    row = shape_info + layer.neurons.reshape(-1).tolist()
+                    print(row)
+                    mywriter.writerow(row)
 
+    def load_model(self,model_name):
+        if not model_name:
+            print("No model name provided")
+            return 
+        with open(f'./models/{model_name}.csv', 'r', newline='') as file:
+            myreader = csv.reader(file, delimiter=',',quoting=csv.QUOTE_NONNUMERIC)
+            for row in myreader:
+                print(row)
+
+
+
+    # Access for testing
     def output_layer(self):
         return self.layers[-1]

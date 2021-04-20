@@ -106,6 +106,21 @@ class TestNeuralNetwork(unittest.TestCase):
         print(nn.feed_forward([1, 0]),"Expected 1")
         print(nn.feed_forward([1, 1]),"Expected 0")
 
+    def test_save_model(self):
+        nn = NeuralNetwork(2, 2)
+        nn.addHiddenLayer(2)
+        # Save a test model 
+        nn.output_layer().set_neurons(
+            np.array([[0.60, 0.4, 0.45], [0.60, 0.50, 0.55]]))
+        nn.output_layer().print_weights()
+        nn.layers[1].set_neurons(
+            np.array([[0.35, 0.15, 0.20], [0.35, 0.25, 0.30]]))
+        nn.layers[1].print_weights()
+        nn.save_model("test_model.csv")
+        # Read if and verify that it is correct
+        model = NeuralNetwork(2,2)
+        model.load_model("test_model.csv")
+
 
 if __name__ == '__main__':
     unittest.main()
