@@ -8,9 +8,14 @@ train_or_load = 'load'
 
 def main():
     # Test the XOR dataset
+
+    #
+
+    #[0,1]  [1]  
     df = pd.read_csv('./custom_ml_implementation/datasets/xor.csv', sep=',')
     features = df[['x', 'y']].values
     labels = df['label'].values
+    
     EPOCHS = 2500
     LEARNING_RATE = 0.5
     REGULARIZATION = 0.5
