@@ -62,6 +62,7 @@ class Kmeans():
             if(rand_index not in sampled_indexes):
                 samples.append(array_of_arrays[rand_index])
                 sampled_indexes.append(rand_index)
+        return samples
 
 
     def calculate_closest_cluster(self,example,K_coords):
@@ -77,7 +78,7 @@ class Kmeans():
             if(distance_to_cluster_center < closest_distance):
                 closest_distance = distance_to_cluster_center
                 closest_cluster = index
-        return index
+        return closest_cluster
 
 
 
