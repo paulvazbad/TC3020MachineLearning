@@ -39,3 +39,11 @@ class TestKmeans(unittest.TestCase):
         example = np.array([4,5,9]) # 9 in z
         closest_cluster = kmeans.calculate_closest_cluster(example,self.examples_3_by_3)
         self.assertEqual(closest_cluster,2)
+
+    def test_fit(self):
+        group_a = np.arange(12).reshape((6,2)) #0-11
+        group_b = np.arange(500,512).reshape((6,2)) #50-61
+        examples  = np.concatenate((group_a, group_b), axis=0)
+        examples = np.array(examples)
+        kmeans = Kmeans()
+        kmeans.fit(2,examples)
