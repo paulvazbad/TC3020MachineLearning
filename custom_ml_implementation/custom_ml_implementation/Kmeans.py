@@ -39,7 +39,7 @@ class Kmeans():
         for index, example in enumerate(K_coords):
             K_coords[index] = self.average_of_points(examples[index])
 
-    def average_of_points(examples_in_cluster):
+    def average_of_points(self,examples_in_cluster):
         '''
         [[0,1,2]
         [3,4,5]
@@ -48,7 +48,7 @@ class Kmeans():
         '''
         return average(examples_in_cluster, axis=0)
 
-    def sample(array_of_arrays, K):
+    def sample(self,array_of_arrays, K):
         '''
         [[0,1,2]
         [3,4,5]
