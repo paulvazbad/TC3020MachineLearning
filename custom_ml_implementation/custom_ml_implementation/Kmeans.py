@@ -138,11 +138,20 @@ class Kmeans():
         else:
             print("Please pass a list of examples")
 
-    def elbow(self):
+    def elbow(self,examples,max_K=5):
         '''
        Create the plot to see how the cost function changes depending on the selectedkvalue. (testingwithk= 2. . .7is just fine).
         '''
         print("elbow")
+        costs_for_K = []
+        for K in range (1,max_K):
+            self.fit(K,examples,20)
+            costs_for_K.append(self.cost(examples))
+        
+        plt.plot(range(1,max_K),costs_for_K, marker="*")
+        plt.title("Error for number of K")
+        plt.show()
+
 
     def J(self, K_coords, examples_grouped_by_cluster, examples):
         '''
@@ -171,9 +180,10 @@ class Kmeans():
         legends = []
         for index, cluster_examples_indexes in enumerate(examples_grouped_by_cluster):
             examples_in_cluster_values = examples[cluster_examples_indexes, :]
-            plt.scatter(examples_in_cluster_values[:, 0], examples_in_cluster_values[:, 1])
+            sc = plt.scatter(examples_in_cluster_values[:, 0], examples_in_cluster_values[:, 1])
+            plt.scatter(self.K_coords[index, 0], self.K_coords[index,1], marker="x",c="#000000")
+            
             legends.append(index)
-            plt.legend(legends)
-
+        plt.legend(legends)
         plt.title("Clusters")
         plt.show()
