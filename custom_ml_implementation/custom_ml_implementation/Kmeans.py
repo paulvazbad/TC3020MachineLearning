@@ -44,8 +44,8 @@ class Kmeans():
                 # Append the example in dataset of the example
                 examples_grouped_by_cluster[closest_cluster].append(index)
             
-            #cost = self.J(K_coords, examples_grouped_by_cluster)    
-            #print("Error:" + str(cost))
+            cost = self.J(K_coords, examples_grouped_by_cluster,examples)    
+            print("Error:" + str(cost))
             
             # Move the centroid of the cluster to the average of the assigned points
             for index, examples_in_cluster in enumerate(examples_grouped_by_cluster):
@@ -124,15 +124,15 @@ class Kmeans():
         '''
         print("elbow")
 
-    def J(self, K_coords, examples_grouped_by_cluster):
+    def J(self, K_coords, examples_grouped_by_cluster, examples):
         '''
 
         CHECK THIS
         examples_grouped_by_cluster[K][features] = [[index_x1, index_x2,..., index_xn]]
         '''
         total_cost = 0
-        for cluster_number, cluster_examples in enumerate(examples_grouped_by_cluster):
-            for example in cluster_examples:
+        for cluster_number, examples_in_cluster in enumerate(examples_grouped_by_cluster):
+            for example in examples[examples_in_cluster,:]:
                 total_cost += self.distance_between_two_points(
                     K_coords[cluster_number], example)
         return total_cost
