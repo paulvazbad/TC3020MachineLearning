@@ -41,13 +41,9 @@ class Kmeans():
 
             # Move the centroid of the cluster to the average of the assigned points
             for index, examples_in_cluster in enumerate(examples_grouped_by_cluster):
-                print("Examples assigned to cluster %d" % index)
-                print(examples[examples_in_cluster, :])
                 K_coords[index] = self.average_of_points(
                     examples[examples_in_cluster, :])
 
-            print("New coords: ")
-            print(K_coords)
 
         self.K_coords = K_coords
         self.K = K
