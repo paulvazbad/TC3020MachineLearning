@@ -6,6 +6,12 @@ Package for Python >3.5 with Linear Regression and Logistic Regression modules.
 - tests: unit tests
 - dist: buildfiles (wheels and tar.gz) files
 
+## How to build
+
+1. Configure the version number in setup.cfg
+2. Activate the /venv
+3. run the following command in the root of the project: `python -m build`
+
 ## How to install
 1. Copy the `custom_ml_implementation-{VERSION}-py3-none-any.wheel` file into your project root folder
 
